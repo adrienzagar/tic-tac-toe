@@ -27,6 +27,7 @@ const Shape = styled(motion.p).attrs(() => ({
     top: 50%;
     left: 50%;
     font-size: 4rem;
+    text-shadow: -2px 2px #00000066;
 `;
 
 export type CellValue = "x" | "o" | undefined;
