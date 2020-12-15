@@ -15,5 +15,5 @@ type StartScreenProps = {
 }
 
 export const StartScreen: FC<StartScreenProps> = ({onStart}) => {
-    return <button onClick={onStart}>Start</button>
+    return <StartButton onClick={onStart}>Start</StartButton>
 }
