@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components'
-import { Board } from './Board';
+import { Board, Winner } from './Board';
+import { ResetScreen } from './ResetScreen';
+import { StartScreen } from './StartScreen';
 
 const BoardContainer = styled.div`
   background: #ffffff;
@@ -9,18 +11,34 @@ const BoardContainer = styled.div`
   border-radius: 16px;
   box-shadow: -6px 10px 30px 4px #00000033;
   border: 20px solid #ffffff;
-`
+`;
 
-const Cell = styled.div`
-background-color: #ffffff;
-`
+type GameState = "start" | "game" | 'reset';
 
 function App() {
-  return (
-    <BoardContainer>
-      <Board onGameEnd={() => {}}/>
-    </BoardContainer>
-  );
+
+  const [winner, setWinner] = useState<Winner>();
+  const [gameState, setGameState] = useState<GameState>('start');
+  const onStart = () => {
+    setGameState('game')
+  }
+  const onGameEnd = (winner: Winner) => {
+    setWinner(winner);
+    setGameState("reset")
+  }
+  const onReset = () => {
+    setWinner(undefined);
+    setGameState('start');
+  }
+
+  return <BoardContainer>
+
+      {{
+      start: <StartScreen onStart={onStart}/>,
+        game: <Board onGameEnd={onGameEnd} />,
+      reset: <ResetScreen winner={winner} onReset={onReset}/>
+      }[gameState]}
+    </BoardContainer >;
 }
 
 export default App;

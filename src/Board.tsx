@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Cell, CellValue } from './Cell';
 
@@ -13,11 +13,17 @@ column-gap: 6px;
 row-gap: 6px;
 `;
 
-type Winner = CellValue | "tie";
+export type Winner = CellValue | "tie";
 
 type BoardProps = {
     onGameEnd(winner: Winner): void;
 };
+
+const winningConditions = [
+    [0,1,2], [3,4,5], [6,7,8], // Horizontal
+    [0,3,6], [1,4,7], [2,5,8], // Vertical
+    [0,4,8], [2,4,6], // Diagonal
+]
 
 export const Board: FC<BoardProps> = ({ onGameEnd }) => {
 
@@ -25,6 +31,23 @@ export const Board: FC<BoardProps> = ({ onGameEnd }) => {
 
     const currentShape: CellValue = cells.filter(n => n).length % 2 ? 'o' : "x";
 
+    const winningCondition = winningConditions.find(cond => {
+        const line = cond.map(cellIndex => cells[cellIndex])
+        return line[0] && line.every(cellValue => cellValue === line[0])
+    })
+
+    const tie: boolean = cells.filter(c => c).length === 9;
+    const winningShape = winningCondition ? cells[winningCondition[0]] : undefined;
+    
+    useEffect(() => {
+        if (winningShape) {
+            return onGameEnd(winningShape)
+        }
+        if (tie) {
+            return onGameEnd("tie")
+        }
+    }, [winningShape, tie , onGameEnd])
+    
     const toggleCell = (index: number) => {
         setCells(cells => cells.map((c, i) => i === index ? currentShape : c ))
     }
