@@ -68,11 +68,20 @@ function App() {
   const onReset = () => {
     setWinner(undefined);
     setGameState('start');
-  }
+  };
+
+  const Heading = styled.h1`
+    color: #fff;
+    text-align: center;
+    margin-bottom: '50px';
+    font-size: 4rem;
+    text-shadow: -3px 3px #00000066;
+    font-family: "Varela Round";
+  `;
 
   return (
     <>
-      <h1>TypeScript Tic-Tac-Toe</h1>
+      <Heading>TypeScript Tic-Tac-Toe</Heading>
       <BoardContainer animate={gameState}>
           {{
           start: <StartScreen onStart={onStart}/>,
